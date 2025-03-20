@@ -1,0 +1,100 @@
+<div class="card">
+    <p-table
+    #dt2 
+    [value]="filterProduct" 
+    [rows]="10"
+    dataKey="id"
+    [loading]="loading"
+    [rowsPerPageOptions]="[10, 25, 50]"
+    [globalFilterFields]="['title', 'category']"
+    [paginator]="true"
+    [tableStyle]="{ 'min-width': '60rem' }">
+        <ng-template #caption>
+            <div class="flex"> 
+                <span class="text-xl font-bold">Products</span>  
+                <p-iconfield iconPosition="left" class="ml-auto">
+                    <p-inputicon>
+                        <i class="pi pi-search"></i>
+                    </p-inputicon>
+                    <input
+                        pInputText
+                        type="text"
+                        (input)="applyGlobalFilter($event, dt2)"
+                        placeholder="Search keyword"
+                    />
+                </p-iconfield>
+                <p-button label="Add Product" [outlined]="true" icon="pi pi-filter-slash" (click)="addNewProduct()" />     
+            </div>
+        </ng-template>
+        <ng-template #header>
+            <tr>
+                <th>Name
+                    <p-columnFilter field="representative" matchMode="in" [showClearButton]="false" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                        <ng-template #filter let-filter="filterCallback">
+                            <p-multiselect
+                                [(ngModel)]="selectedRepresentatives" 
+                                [options]="representatives"
+                                placeholder="Any"
+                                (onChange)="filterRepresentatives($event)" 
+                                [panelStyle]="{ minWidth: '16rem' }"
+                            >
+                                <ng-template let-option #item>
+                                    <div class="flex items-center gap-2">
+                                        <span>{{ option }}</span> 
+                                    </div>
+                                </ng-template>
+                            </p-multiselect>
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>Image</th>
+                <th>Price</th>
+                <th>Category
+                    <p-columnFilter field="category" [showClearButton]="false" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
+                        <ng-template #filter let-filter="filterCallback">
+                            <p-multiselect
+                                [(ngModel)]="selectedCategory" 
+                                [options]="category"
+                                placeholder="Any"
+                                (onChange)="filterCategory($event)" 
+                                [panelStyle]="{ minWidth: '16rem' }"
+                            >
+                                <ng-template let-option #item>
+                                    <div class="flex items-center gap-2">
+                                        <span>{{ option }}</span> 
+                                    </div>
+                                </ng-template>
+                            </p-multiselect>
+                        </ng-template>
+                    </p-columnFilter>
+                </th>
+                <th>Reviews</th>
+                <th colspan="2" style="text-align: center;">Action</th>
+            </tr>
+        </ng-template>
+        <ng-template #body let-product>
+            <tr>
+                <td>{{ product.title }}</td>
+                <td>
+                    <img
+                        [src]="product.image"
+                        [alt]="product.title"
+                        class="w-24 rounded"
+                        width="50px"
+                        height="50px"
+                    />
+                </td>
+                <td>{{ product.price | currency: '₹' }}</td>
+                <td>{{ product.category | uppercase }}</td>
+                <td><p-rating [(ngModel)]="product.rating.rate" [readonly]="true" /><span>{{ product.rating.count | ratings  }}</span></td>
+                <td><p-button label="Edit" severity="warn" (onClick)="editProduct(product.id)" /></td>
+                <td>
+                    <p-button label="Delete" severity="danger" (onClick)="confirm($event, product.id)" />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>
+
+<p-toast />
+<p-confirmdialog />

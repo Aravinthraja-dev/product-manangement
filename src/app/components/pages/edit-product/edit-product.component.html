@@ -1,0 +1,67 @@
+<h1>{{ isEditMode ? 'Edit Product' : 'Add Product' }}</h1>
+<div class="container">
+    <div class="form-detail">
+        <form [formGroup]="form">
+            <p-inputgroup>
+                <input pInputText formControlName="title" placeholder="Title" />
+            </p-inputgroup>
+            @if (form.get('title')?.invalid && form.get('title')?.touched) {
+                <small class="p-error">
+                    @if (form.get('title')?.errors?.['required']) { <span>Title is required.</span> }
+                    @if (form.get('title')?.errors?.['minlength']) { <span>Title must be at least 3 characters.</span> }
+                </small>
+            }
+        
+            <p-inputgroup>
+                <p-inputgroup-addon>₹</p-inputgroup-addon>
+                <p-inputnumber formControlName="price" placeholder="Price" />
+            </p-inputgroup>
+            @if (form.get('price')?.invalid && form.get('price')?.touched) {}
+            <small class="p-error">
+                @if (form.get('price')?.errors?.['required']) { <span>Price is required.</span> }
+                @if (form.get('price')?.errors?.['min']) { <span>Price must be a positive number.</span> }
+            </small>
+        
+            <p-inputgroup>
+                <p-select 
+                    formControlName="category" 
+                    [options]="category" 
+                    placeholder="Category"
+                    class="category" />
+            </p-inputgroup>
+            @if (form.get('category')?.invalid && form.get('category')?.touched) {
+                <small class="p-error">
+                    @if (form.get('category')?.errors?.['required']) { <span>Category is required.</span> }
+                </small>
+            }
+
+            <p-inputgroup>
+                <input pInputText formControlName="image" placeholder="Image URL" />
+            </p-inputgroup>
+            @if (form.get('image')?.invalid && form.get('image')?.touched) { 
+                <small class="p-error">
+                    @if (form.get('image')?.errors?.['required']) { <span>Image URL is required.</span> }
+                    @if (form.get('image')?.errors?.['pattern'] ) { <span>Image URL must be a valid URL.</span> }
+                </small>
+            }
+
+            <p-inputgroup>
+                <p-iftalabel>
+                    <textarea pTextarea id="description" formControlName="description" rows="5" cols="30" style="resize: none" placeholder="Description"></textarea>
+                </p-iftalabel>
+            </p-inputgroup>
+            @if (form.get('description')?.invalid && form.get('description')?.touched) {
+                <small class="p-error">
+                    @if (form.get('description')?.errors?.['required']) {<span>Description is required.</span>}
+                    @if (form.get('description')?.errors?.['minlength']) { <span>Description must be at least 10 characters.</span> }
+                </small>
+            }
+            <p-button class="submit-button" type="submit" label="{{ isEditMode ? 'Update' : 'Add' }}"></p-button>
+        </form>
+    </div>
+    <div class="image-preview">
+        @if (form.get('image')?.value) {
+            <img [src]="form.get('image')?.value" alt="Product Image Preview" />
+        }
+    </div>
+</div>
