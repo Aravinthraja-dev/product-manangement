@@ -26,31 +26,6 @@ export class HeaderComponent {
             icon: 'pi pi-home',
             command: () => this.onHomeClick(),
         },
-        {
-            label: 'Projects',
-            icon: 'pi pi-search',
-            badge: '3',
-            items: [
-                {
-                    label: 'Core',
-                    icon: 'pi pi-bolt',
-                    shortcut: '⌘+S',
-                },
-                {
-                    label: 'Blocks',
-                    icon: 'pi pi-server',
-                    shortcut: '⌘+B',
-                },
-                {
-                    separator: true,
-                },
-                {
-                    label: 'UI Kit',
-                    icon: 'pi pi-pencil',
-                    shortcut: '⌘+U',
-                },
-            ],
-        },
     ];
     }
 

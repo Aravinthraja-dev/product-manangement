@@ -1,7 +1,8 @@
+<h2>Product List</h2>
 <div class="card">
     <p-table
-    #dt2 
-    [value]="filterProduct" 
+    #dt2
+    [value]="filterProduct"
     [rows]="10"
     dataKey="id"
     [loading]="loading"
@@ -10,9 +11,9 @@
     [paginator]="true"
     [tableStyle]="{ 'min-width': '60rem' }">
         <ng-template #caption>
-            <div class="flex"> 
-                <span class="text-xl font-bold">Products</span>  
-                <p-iconfield iconPosition="left" class="ml-auto">
+          <div class="flex flex-wrap items-center gap-2 w-full">
+            <div class="flex-1">
+                <p-iconfield iconPosition="left" class="w-full">
                     <p-inputicon>
                         <i class="pi pi-search"></i>
                     </p-inputicon>
@@ -21,26 +22,31 @@
                         type="text"
                         (input)="applyGlobalFilter($event, dt2)"
                         placeholder="Search keyword"
+                        class="w-full p-2"
                     />
                 </p-iconfield>
-                <p-button label="Add Product" [outlined]="true" icon="pi pi-filter-slash" (click)="addNewProduct()" />     
             </div>
+            <p-button label="Add Product" [outlined]="true" icon="pi pi-plus" (click)="addNewProduct()" class="whitespace-nowrap" />
+        </div>
+
         </ng-template>
         <ng-template #header>
             <tr>
-                <th>Name
+                <th pSortableColumn="title" style="width:20%">
+                  Name
+                  <p-sortIcon field="title" />
                     <p-columnFilter field="representative" matchMode="in" [showClearButton]="false" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
                         <ng-template #filter let-filter="filterCallback">
                             <p-multiselect
-                                [(ngModel)]="selectedRepresentatives" 
+                                [(ngModel)]="selectedRepresentatives"
                                 [options]="representatives"
                                 placeholder="Any"
-                                (onChange)="filterRepresentatives($event)" 
+                                (onChange)="filterRepresentatives($event)"
                                 [panelStyle]="{ minWidth: '16rem' }"
                             >
                                 <ng-template let-option #item>
                                     <div class="flex items-center gap-2">
-                                        <span>{{ option }}</span> 
+                                        <span>{{ option }}</span>
                                     </div>
                                 </ng-template>
                             </p-multiselect>
@@ -53,15 +59,15 @@
                     <p-columnFilter field="category" [showClearButton]="false" matchMode="in" display="menu" [showMatchModes]="false" [showOperator]="false" [showAddButton]="false">
                         <ng-template #filter let-filter="filterCallback">
                             <p-multiselect
-                                [(ngModel)]="selectedCategory" 
+                                [(ngModel)]="selectedCategory"
                                 [options]="category"
                                 placeholder="Any"
-                                (onChange)="filterCategory($event)" 
+                                (onChange)="filterCategory($event)"
                                 [panelStyle]="{ minWidth: '16rem' }"
                             >
                                 <ng-template let-option #item>
                                     <div class="flex items-center gap-2">
-                                        <span>{{ option }}</span> 
+                                        <span>{{ option }}</span>
                                     </div>
                                 </ng-template>
                             </p-multiselect>

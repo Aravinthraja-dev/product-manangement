@@ -48,20 +48,20 @@ export class DashboardComponent implements OnInit{
 
   loading: boolean = true;
 
-  representatives!: any;
+  representatives!: string[];
 
   selectedRepresentatives: string[] = [];
 
   filterProduct: ProductDTO[] = [];
 
-  category: any;
+  category!: string[];
 
   selectedCategory: string[] = []
 
   constructor(
-    private productService: ProductService, 
-    private router: Router, 
-    private confirmationService: ConfirmationService, 
+    private productService: ProductService,
+    private router: Router,
+    private confirmationService: ConfirmationService,
     private messageService: MessageService
   ) { }
 
@@ -84,7 +84,7 @@ export class DashboardComponent implements OnInit{
         return of([])
       })
     ).subscribe()
-  }  
+  }
 
   applyGlobalFilter(event: Event, dt2: any) {
     const inputElement = event.target as HTMLInputElement;
@@ -144,7 +144,7 @@ export class DashboardComponent implements OnInit{
   filterRepresentatives(event: any): void {
     if (event.value === undefined || event.value.length === 0) {
         this.selectedRepresentatives = [];
-        this.filterCallback([]); 
+        this.filterCallback([]);
     } else {
         this.selectedRepresentatives = event.value;
         this.filterCallback(this.selectedRepresentatives);

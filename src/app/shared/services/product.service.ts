@@ -14,11 +14,11 @@ export class ProductService {
     return this.http.get<ProductDTO[]>('https://fakestoreapi.com/products')
   }
 
-  getAllCategories(): Observable<any> {
-    return this.http.get<any>('https://fakestoreapi.com/products/categories')
+  getAllCategories(): Observable<string[]> {
+    return this.http.get<string[]>('https://fakestoreapi.com/products/categories')
   }
 
-  addProduct(Product: ProductDTO): Observable<any> {
+  addProduct(Product: ProductDTO): Observable<ProductDTO> {
     return this.http.post<ProductDTO>('https://fakestoreapi.com/products', Product)
   }
 

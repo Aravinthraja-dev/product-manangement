@@ -1,7 +1,7 @@
 <h1>{{ isEditMode ? 'Edit Product' : 'Add Product' }}</h1>
 <div class="container">
     <div class="form-detail">
-        <form [formGroup]="form">
+        <form [formGroup]="form" (ngSubmit)="onSubmit()">
             <p-inputgroup>
                 <input pInputText formControlName="title" placeholder="Title" />
             </p-inputgroup>
@@ -11,7 +11,7 @@
                     @if (form.get('title')?.errors?.['minlength']) { <span>Title must be at least 3 characters.</span> }
                 </small>
             }
-        
+
             <p-inputgroup>
                 <p-inputgroup-addon>₹</p-inputgroup-addon>
                 <p-inputnumber formControlName="price" placeholder="Price" />
@@ -21,11 +21,11 @@
                 @if (form.get('price')?.errors?.['required']) { <span>Price is required.</span> }
                 @if (form.get('price')?.errors?.['min']) { <span>Price must be a positive number.</span> }
             </small>
-        
+
             <p-inputgroup>
-                <p-select 
-                    formControlName="category" 
-                    [options]="category" 
+                <p-select
+                    formControlName="category"
+                    [options]="category"
                     placeholder="Category"
                     class="category" />
             </p-inputgroup>
@@ -36,9 +36,9 @@
             }
 
             <p-inputgroup>
-                <input pInputText formControlName="image" placeholder="Image URL" />
+                <input pInputText formControlName="image" placeholder="Image URL" (input)="updateImagePreview()"/>
             </p-inputgroup>
-            @if (form.get('image')?.invalid && form.get('image')?.touched) { 
+            @if (form.get('image')?.invalid && form.get('image')?.touched) {
                 <small class="p-error">
                     @if (form.get('image')?.errors?.['required']) { <span>Image URL is required.</span> }
                     @if (form.get('image')?.errors?.['pattern'] ) { <span>Image URL must be a valid URL.</span> }
@@ -56,12 +56,15 @@
                     @if (form.get('description')?.errors?.['minlength']) { <span>Description must be at least 10 characters.</span> }
                 </small>
             }
-            <p-button class="submit-button" type="submit" label="{{ isEditMode ? 'Update' : 'Add' }}"></p-button>
+            <div class="card flex justify-center">
+              <p-button class="submit-button" type="submit" label="{{ isEditMode ? 'Update' : 'Add' }}"></p-button>
+          </div>
+
         </form>
     </div>
     <div class="image-preview">
-        @if (form.get('image')?.value) {
-            <img [src]="form.get('image')?.value" alt="Product Image Preview" />
-        }
+        <img [src]="imagePreviewUrl ? imagePreviewUrl : 'assets/images/preview.jpg'" alt="Product Image Preview" />
     </div>
 </div>
+
+<p-toast />

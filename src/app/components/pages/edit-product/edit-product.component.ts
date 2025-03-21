@@ -14,21 +14,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ProductDTO } from '../../../shared/interface/product.interface';
 import { catchError, of, Subject, takeUntil, tap } from 'rxjs';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 
 @Component({
   selector: 'app-edit-product',
   imports: [
-    FormsModule, 
-    InputGroupModule, 
-    InputGroupAddonModule, 
-    InputTextModule, 
-    SelectModule, 
+    FormsModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    InputTextModule,
+    SelectModule,
     InputNumberModule,
     ReactiveFormsModule,
     IftaLabelModule,
     DividerModule,
-    ButtonModule
+    ButtonModule,
+    ToastModule
   ],
   templateUrl: './edit-product.component.html',
   styleUrl: './edit-product.component.scss',
@@ -42,10 +44,11 @@ export class EditProductComponent implements OnInit{
   product!: ProductDTO;
   isEditMode: boolean = false;
   private destroy$ = new Subject<void>
+  imagePreviewUrl: string | null = null;
 
   constructor(
-    private formBuilder: FormBuilder, 
-    private productService: ProductService, 
+    private formBuilder: FormBuilder,
+    private productService: ProductService,
     private route: ActivatedRoute,
     private router: Router,
     private messageService: MessageService
@@ -79,9 +82,15 @@ export class EditProductComponent implements OnInit{
     ).subscribe((data) => {
       this.product = data.find((item) => item.id === this.productId) as ProductDTO;
       if(this.product) {
-        this.form.patchValue(this.product)
+        this.form.patchValue(this.product);
+        this.updateImagePreview();
       }
     });
+  }
+
+  updateImagePreview() {
+    const imageUrl = this.form.get('image')?.value;
+    this.imagePreviewUrl = imageUrl;
   }
 
   onSubmit(): void {
@@ -95,28 +104,26 @@ export class EditProductComponent implements OnInit{
         this.productService.updateProduct(this.productId, this.product).pipe(
           tap(() => {
             this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product updated successfully' });
+            setTimeout(() => this.router.navigate(['/dashboard']), 500);
           }),
           catchError((err) => {
             this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to update product' });
-            return of(null); 
+            return of(null);
           }),
           takeUntil(this.destroy$)
-        ).subscribe(() => {
-          this.router.navigate(['/dashboard'])
-        })
+        ).subscribe()
     } else {
       this.productService.addProduct(productData).pipe(
         tap(() => {
           this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Product Added successfully' });
+          setTimeout(() => this.router.navigate(['/dashboard']), 500);
         }),
         catchError((err) => {
           this.messageService.add({ severity: 'error', summary: 'Error', detail: 'Failed to Added product' });
-          return of(null); 
+          return of(null);
         }),
         takeUntil(this.destroy$)
-      ).subscribe(() => {
-        this.router.navigate(['/dashboard']);
-      })
+      ).subscribe()
     }
   }
 
